@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>01-gp-processing</title>
+    <script type="module" crossorigin src="./assets/index-txb0mb7R.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B-hr6ABS.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.14.10%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%23%23%23%20Selected%20views%20of%20the%20dataset%20generated%20in%20the%20tsca_categories%20repository%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20pandas%20as%20pd%0A%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20import%20altair%20as%20alt%0A%20%20%20%20import%20openpyxl%0A%20%20%20%20from%20pathlib%20import%20Path%0A%0A%20%20%20%20return%20Path%2C%20alt%2C%20mo%2C%20np%2C%20pd%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20from%20rdkit%20import%20Chem%0A%20%20%20%20from%20rdkit.Chem.Draw%20import%20IPythonConsole%0A%20%20%20%20from%20rdkit.Chem%20import%20Draw%0A%20%20%20%20from%20rdkit.Chem%20import%20Draw%0A%20%20%20%20from%20rdkit.Chem%20import%20rdFMCS%0A%20%20%20%20Draw.SetComicMode(IPythonConsole.drawOptions)%0A%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(Path)%3A%0A%0A%20%20%20%20TOP%20%3D%20Path.cwd().as_posix().replace('notebooks'%2C'')%0A%20%20%20%20raw_dir%20%3D%20Path(TOP)%20%2F%20'data'%20%2F'raw'%0A%20%20%20%20processed_dir%20%3D%20%20Path(TOP)%20%2F%20'data'%20%2F'processed'%0A%20%20%20%20interim_dir%20%3D%20Path(TOP)%20%2F%20'data'%20%2F'interim'%0A%20%20%20%20external_dir%20%3D%20Path(TOP)%20%2F%20'data'%20%2F'external'%0A%20%20%20%20figures_dir%20%3D%20Path(TOP)%20%2F%20'reports'%20%2F'figures'%0A%20%20%20%20return%20interim_dir%2C%20raw_dir%0A%0A%0A%40app.cell%0Adef%20_(pd%2C%20raw_dir)%3A%0A%20%20%20%20df%20%3D%20(pd.read_excel(raw_dir%2F'tsca_categorisation_071124_wmappingdict.xlsx'%2C%20index_col%3D%5B0%5D))%0A%20%20%20%20return%20(df%2C)%0A%0A%0A%40app.cell%0Adef%20_(df%2C%20mo)%3A%0A%20%20%20%20_df%20%3D%20mo.sql(%0A%20%20%20%20%20%20%20%20f%22%22%22%0A%20%20%20%20%20%20%20%20select%20*%20from%20df%20where%20physical_form%20%3D%20'liquid'%20%3B%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(alt%2C%20df%2C%20mo)%3A%0A%20%20%20%20alt.theme.enable('googlecharts')%0A%20%20%20%20physical_form%20%3D%20mo.ui.altair_chart(alt.Chart(df.physical_form.value_counts().reset_index()).mark_bar().encode(x%20%3D%20'physical_form%3AN'%2C%20y%20%3D%20'count%3AQ'))%0A%20%20%20%20physical_form%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%23alt.Chart(df.groupby('group').size().reset_index().rename(columns%20%3D%20%7B0%3A%20'Frequency_Count'%7D).sort_values(by%20%3D%20%23%5B'Frequency_Count'%5D%2C%20ascending%3DFalse)).mark_bar().encode(alt.Y('group%3AN'%2Csort%3D'-x')%2C%20alt.X('Frequency_Count'))%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(alt%2C%20df%2C%20mo)%3A%0A%20%20%20%20cats_counts%20%3D%20mo.ui.altair_chart(alt.Chart(df.groupby('group').size().reset_index().rename(columns%20%3D%20%7B0%3A%20'Frequency_Count'%7D).sort_values(by%20%3D%20%5B'Frequency_Count'%5D%2C%20ascending%3DFalse)).mark_bar().encode(alt.X('Frequency_Count%3AQ').title('Frequency%20Count')%2C%20alt.Y('group%3AN'%2C%20sort%3D'-x').title('Group')))%0A%20%20%20%20cats_counts%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(interim_dir%2C%20pd)%3A%0A%20%20%20%20opera_df%20%3D%20pd.read_csv(interim_dir%2F'opera_df_tox.csv'%2C%20index_col%3D%5B0%5D)%0A%0A%20%20%20%20return%20(opera_df%2C)%0A%0A%0A%40app.cell%0Adef%20_(opera_df)%3A%0A%20%20%20%20catmos%20%3D%20%7B%7D%0A%20%20%20%20for%20i%2C%20group%20in%20opera_df.groupby('group_str')%3A%0A%20%20%20%20%20%20%20%20catmos%5Bi%5D%20%3D%20group%5B'CATMoS_LD50_pred'%5D.values%0A%20%20%20%20return%20(catmos%2C)%0A%0A%0A%40app.cell%0Adef%20_(np)%3A%0A%20%20%20%20def%20ecdf(data)%3A%0A%20%20%20%20%20%20%20%20n%20%3D%20len(data)%0A%20%20%20%20%20%20%20%20x%20%3D%20np.sort(data)%0A%20%20%20%20%20%20%20%20y%20%3D%20np.arange(1%2C%20n%2B1)%2Fn%0A%20%20%20%20%20%20%20%20return%20x%2C%20y%0A%20%20%20%20return%20(ecdf%2C)%0A%0A%0A%40app.cell%0Adef%20_(ecdf%2C%20np)%3A%0A%20%20%20%20def%20catmos_summary(d%2C%20label%3DNone)%3A%0A%20%20%20%20%20%20%20%20summary%20%3D%20%7B%7D%0A%20%20%20%20%20%20%20%20summary%5B'median'%5D%20%3D%20np.median(d)%0A%20%20%20%20%20%20%20%20summary%5B'ecdfx'%5D%2C%20summary%5B'ecdfy'%5D%20%3D%20ecdf(d)%0A%20%20%20%20%20%20%20%20summary%5B'label'%5D%20%3D%20label%0A%20%20%20%20%20%20%20%20return%20summary%0A%20%20%20%20return%20(catmos_summary%2C)%0A%0A%0A%40app.cell%0Adef%20_(catmos%2C%20catmos_summary)%3A%0A%20%20%20%20summaries%20%3D%20%5B%5D%0A%20%20%20%20for%20k%2C%20v%20in%20catmos.items()%3A%0A%20%20%20%20%20%20%20%20summaries.append(catmos_summary(v%2C%20label%20%3D%20k))%0A%0A%20%20%20%20return%20(summaries%2C)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20selected_labels%20%3D%20%5B%0A%20%20%20%20%20%20%20%20%22('Benzenoids'%2C%205.0)%22%2C%0A%20%20%20%20%20%20%20%20%22('Fatty%20Acyls'%2C%203.0)%22%2C%0A%20%20%20%20%20%20%20%20%22('Alkaloids%20and%20derivatives'%2C%20nan)%22%2C%0A%20%20%20%20%20%20%20%20%22('Organosulfur%20compounds'%2C%202.0)%22%2C%0A%20%20%20%20%20%20%20%20%22('Allenes'%2C%20nan)%22%0A%20%20%20%20%5D%0A%20%20%20%20return%20(selected_labels%2C)%0A%0A%0A%40app.cell%0Adef%20_(np%2C%20pd%2C%20selected_labels%2C%20summaries)%3A%0A%20%20%20%20plot_data%20%3D%20%5B%5D%0A%20%20%20%20for%20summary%20in%20summaries%3A%0A%20%20%20%20%20%20%20%20label%20%3D%20summary%5B'label'%5D%0A%20%20%20%20%20%20%20%20if%20label%20in%20selected_labels%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20x%20%3D%20np.log10(summary%5B'ecdfx'%5D)%20%20%23%20log10%20transform%0A%20%20%20%20%20%20%20%20%20%20%20%20y%20%3D%20summary%5B'ecdfy'%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20for%20xi%2C%20yi%20in%20zip(x%2C%20y)%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20plot_data.append(%7B'label'%3A%20label%2C%20'log10x'%3A%20xi%2C%20'ecdfy'%3A%20yi%7D)%0A%0A%20%20%20%20df_plot%20%3D%20pd.DataFrame(plot_data)%0A%20%20%20%20return%20(df_plot%2C)%0A%0A%0A%40app.cell%0Adef%20_(df_plot)%3A%0A%20%20%20%20df_plot.head()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22Selected%20ECDFs%20for%20categories%20to%20show%20the%20variation%20in%20LD50%20potencies%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(alt%2C%20df_plot%2C%20mo)%3A%0A%20%20%20%20ecdf_selected%20%3D%20mo.ui.altair_chart(alt.Chart(df_plot).mark_point().encode(x%20%3D%20alt.X('log10x%3AQ'%2C%20title%3D'CATMoS_log10pred(LD50)')%2C%20y%20%3D%20alt.Y('ecdfy%3AQ'%2C%20title%3D'ECDF')%2C%20color%3Dalt.Color('label%3AN'%2C%20title%3D'Category-Subcategory')%2C%20tooltip%3D%5B'label%3AN'%2C%20'log10x%3AQ'%2C%20'ecdfy%3AQ'%5D).configure_legend(orient%3D'right'))%0A%20%20%20%20ecdf_selected%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      window.__MARIMO_MOUNT_CONFIG__ = {
+            "filename": "notebook.py",
+            "mode": "read",
+            "version": "0.14.10",
+            "serverToken": "unused",
+            "config": {"completion": {"activate_on_typing": true, "copilot": false}, "display": {"cell_output": "above", "code_editor_font_size": 14, "dataframes": "rich", "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": false, "theme": "dark"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": true}}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        };
+    </script>
+  </body>
+</html>
